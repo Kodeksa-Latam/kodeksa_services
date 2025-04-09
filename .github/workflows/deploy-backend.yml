@@ -1,0 +1,46 @@
+name: Deploy Kodeksa Backend
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  PROJECT_NAME: kodeksa-backend
+  DEPLOY_DIR: ~/kodeksa-backend
+  COMPOSE_FILE: docker-compose.yml
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: List files (debug)
+        run: ls -la
+
+      - name: Copy backend to VPS
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          source: |
+            .
+          target: ${{ env.DEPLOY_DIR }}
+          strip_components: 0
+
+      - name: Deploy backend via Docker Compose
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script: |
+            cd ${{ env.DEPLOY_DIR }}
+            docker network create backnet || true
+            docker-compose -p ${{ env.PROJECT_NAME }} -f ${{ env.COMPOSE_FILE }} up -d --build

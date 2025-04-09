@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kodeksa_backend
+    ports:
+      - "3000:3000"
+    restart: always
+    networks:
+      - backnet
+    environment:
+      # Servidor
+      - PORT=3000
+      - API_PREFIX=api
+
+      # Base de datos
+      - DB_HOST=kodeksa_db
+      - DB_PORT=5432
+      - DB_USERNAME=kodeksa
+      - DB_PASSWORD=&r4DKU6u+X#YX&H#
+      - DB_DATABASE=kodeksa_db
+
+      # Timeouts API
+      - API_TIMEOUT=5000
+
+networks:
+  backnet:
+    external: true
