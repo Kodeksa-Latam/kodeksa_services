@@ -1,0 +1,170 @@
+@startuml kodeksa-db
+
+!define Table(name,desc) class name as "desc" << (T,#FFAAAA) >>
+!define primary_key(x) <b>x</b>
+!define foreign_key(x) <color:red>x</color>
+
+Table(users, "users") {
+   primary_key(id) : uuid
+   first_name: varchar
+   last_name: varchar 
+   email: varchar
+   role: varchar
+   slug: varchar
+   image: varchar
+   is_active: boolean
+   show_curriculum: boolean
+   created_at: datetime
+   updated_at: datetime
+}
+
+Table(card_configurations, "card_configurations") {
+    primary_key(id) : uuid
+    foreign_key(id_user) : uuid
+    image_size:varchar
+    bg_color:varchar
+    text_above:varchar
+    text_above_color:varchar
+    above_font_family:varchar
+    above_font_size:varchar
+    above_font_weight:varchar
+    above_letter_spacing:varchar
+    above_text_transform:varchar
+    above_text_top_offset:varchar
+    text_below:varchar
+    below_font_weight:varchar
+    below_letter_spacing:varchar
+    below_font_family:varchar
+    below_text_transform:varchar
+    text_below_color:varchar
+    created_at: datetime
+    updated_at: datetime
+}
+
+Table(curriculums, "curriculums") {
+    primary_key(id) : uuid
+    foreign_key(id_user) : uuid
+    stack: List[varchar]
+    about_me: varchar
+    github_slug: varchar,
+    linkedin_slug: varchar
+    created_at: datetime
+    updated_at: datetime
+}
+
+Table(work_experiences, "work_experiences") {
+    primary_key(id) : uuid
+    foreign_key(id_user) : uuid
+    role: varchar
+    company_name: varchar
+    from_year: datetime
+    until_year: datetime
+    role_description: varchar
+    created_at: datetime
+    updated_at: datetime
+}
+
+Table(blogs, "blogs") {
+    primary_key(id) : uuid
+    foreign_key(id_user) : uuid
+    image: varchar
+    title: varchar
+    short_description
+    categories: List[varchar]
+    is_active: boolean
+    created_at: datetime
+    updated_at: datetime
+}
+
+Table(blog_sections, "blog_sections") {
+    primary_key(id) : uuid
+    foreign_key(id_blog) : uuid
+    order: int
+    type: varchar
+    content: varchar
+    src: varchar
+    alt: varchar
+    caption: varchar
+    style: varchar
+    items: List[varchar]
+}
+
+Table(languages, "languages"){
+    primary_key(id) : uuid
+    foreign_key(id_user) : uuid
+    language:varchar
+    level: varchar
+    certficate: varchar
+    created_at: datetime
+    updated_at: datetime
+}
+
+Table(solutions, "solutions") {
+    primary_key(id) : uuid
+    title: varchar
+    icon: varchar
+    description: varchar
+    is_active: boolean
+    order: int
+    created_at: datetime
+    updated_at: datetime
+}
+
+Table(features, "features") {
+    primary_key(id) : uuid
+    foreign_key(id_solution) : uuid
+    feature_description: varchar
+    is_active: boolean
+    created_at: datetime
+    updated_at: datetime
+}
+
+Table(vacancies,"vacancies") {
+    primary_key(id) : uuid
+    job_title: varchar
+    slug: varchar
+    mode: varchar
+    years_experience: int
+    short_description: varchar
+    description: varchar
+    stack_required: List[varchar]
+    is_active: boolean
+    status: varchar
+    created_at: datetime
+    updated_at: datetime
+}
+
+Table(applications, "applications"){
+    primary_key(id) : uuid
+    foreign_key(id_vacancy) : uuid
+    name: varchar
+    email: varchar
+    phone: varchar
+    status: varchar
+    application_motivation: varchar
+    is_active: boolean
+    cv_url: varchar
+    created_at: datetime
+    updated_at: datetime
+}
+
+
+Table(contact_requests, "contact_requests") {
+    primary_key(id) : uuid
+    name: varchar
+    email: varchar
+    phone: varchar
+    message: varchar
+    created_at: datetime
+    updated_at: datetime
+}
+
+
+users "1" -- "1" card_configurations
+users "1" -- "1" curriculums
+users "1" -- "0..*" work_experiences
+users "1" -- "0..*" languages
+users "1" -- "0..*" blogs
+blogs "1" -- "0..*" blog_sections
+solutions "1" -- "0..*" features
+vacancies "1" -- "0..*" applications
