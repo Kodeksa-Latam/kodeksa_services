@@ -10,5 +10,6 @@ export default registerAs('database', () => ({
   database: process.env.DB_DATABASE ?? 'nestjs_crud',
   entities: ['dist/**/*.entity{.ts,.js}'],
   synchronize: process.env.NODE_ENV !== 'production', // No usar en producción
-  logging: process.env.NODE_ENV !== 'production',
+  // logging: process.env.NODE_ENV !== 'production',
+  logging: false,
 }));

@@ -21,7 +21,7 @@ Table(users, "users") {
 Table(card_configurations, "card_configurations") {
     primary_key(id) : uuid
     foreign_key(id_user) : uuid
-    image_size:varchar
+    image_size:int
     bg_color:varchar
     text_above:varchar
     text_above_color:varchar
@@ -35,6 +35,7 @@ Table(card_configurations, "card_configurations") {
     below_font_weight:varchar
     below_letter_spacing:varchar
     below_font_family:varchar
+    below_font_size:varchar
     below_text_transform:varchar
     text_below_color:varchar
     created_at: datetime

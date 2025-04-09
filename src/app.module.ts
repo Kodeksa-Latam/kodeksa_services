@@ -1,22 +1,22 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UsersModule } from './modules/users/users.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import databaseConfig from './config/database.config';
 import appConfig from './config/app.config';
-
+import { UserModule } from './modules/users/user.module';
+import { CardConfigurationModule } from './modules/card-configurations/card-configuration.module';
 
 @Module({
   imports: [
-    //? Carga de configuraciones
+    // Carga de configuraciones
     ConfigModule.forRoot({
       isGlobal: true,
       load: [databaseConfig, appConfig],
     }),
 
-    //? Configuración de base de datos
+    // Configuración de base de datos
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -29,12 +29,12 @@ import appConfig from './config/app.config';
     }),
 
     // Módulos de la aplicación
-    UsersModule,
-
+    UserModule,
+    CardConfigurationModule
   ],
   providers: [
-     //? Interceptor global para logging
-     {
+    // Interceptor global para logging
+    {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
     },

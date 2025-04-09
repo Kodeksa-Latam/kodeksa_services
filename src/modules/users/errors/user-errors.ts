@@ -36,6 +36,11 @@ export const UserErrors = {
     message: 'Usuario no encontrado',
     httpStatus: HttpStatus.NOT_FOUND,
   },
+  USER_SLUG_NOT_FOUND: {
+    errorCode: 'USER_SLUG_NOT_FOUND',
+    message: 'Usuario con ese slug no encontrado',
+    httpStatus: HttpStatus.NOT_FOUND,
+  },
   USER_INACTIVE: {
     errorCode: 'USER_INACTIVE',
     message: 'El usuario está inactivo',
