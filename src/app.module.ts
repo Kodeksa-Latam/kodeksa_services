@@ -7,6 +7,7 @@ import databaseConfig from './config/database.config';
 import appConfig from './config/app.config';
 import { UserModule } from './modules/users/user.module';
 import { CardConfigurationModule } from './modules/card-configurations/card-configuration.module';
+import { SolutionModule } from './modules/solutions/solution.module';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { CardConfigurationModule } from './modules/card-configurations/card-conf
 
     // Módulos de la aplicación
     UserModule,
-    CardConfigurationModule
+    CardConfigurationModule,
+    SolutionModule
   ],
   providers: [
     // Interceptor global para logging
