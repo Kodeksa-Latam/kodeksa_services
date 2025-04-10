@@ -1,6 +1,6 @@
-import { IsString, IsEmail, IsNotEmpty, IsOptional, IsBoolean, IsUUID } from 'class-validator';
+import { IsString, IsEmail, IsNotEmpty, IsOptional, IsBoolean } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
-import { Exclude, Expose, Transform, Type } from 'class-transformer';
+import {  Expose, Transform, Type } from 'class-transformer';
 import { CardConfigurationResponseDto } from '../card-configurations/card-configuration.dto';
 import { IsValidEmail } from '../../common/decorators/validation.decorator';
 
@@ -167,8 +167,7 @@ export class UserResponseDto {
   @Type(() => CardConfigurationResponseDto)
   cardConfiguration?: CardConfigurationResponseDto;
 
-  // @Exclude()
-  // password: string;
+
 
   constructor(partial: Partial<UserResponseDto>) {
     Object.assign(this, partial);

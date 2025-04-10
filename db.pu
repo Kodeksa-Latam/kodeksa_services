@@ -45,10 +45,18 @@ Table(card_configurations, "card_configurations") {
 Table(curriculums, "curriculums") {
     primary_key(id) : uuid
     foreign_key(id_user) : uuid
-    stack: List[varchar]
     about_me: varchar
     github_slug: varchar,
     linkedin_slug: varchar
+    created_at: datetime
+    updated_at: datetime
+}
+
+Table(skills, "skills") {
+    primary_key(id) : uuid
+    foreign_key(id_user) : uuid
+    skill_name: varchar
+    url_certificate: varchar
     created_at: datetime
     updated_at: datetime
 }
@@ -163,6 +171,7 @@ Table(contact_requests, "contact_requests") {
 
 users "1" -- "1" card_configurations
 users "1" -- "1" curriculums
+users "1" -- "0..*" skills
 users "1" -- "0..*" work_experiences
 users "1" -- "0..*" languages
 users "1" -- "0..*" blogs
