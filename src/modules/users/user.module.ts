@@ -4,11 +4,13 @@ import { UserEntity } from './user.entity';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { CardConfigurationModule } from '../card-configurations/card-configuration.module';
+import { CurriculumModule } from '../curriculums/curriculum.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserEntity]),
     forwardRef(() => CardConfigurationModule), // Prevenir dependencia circular
+    forwardRef(() => CurriculumModule), // Prevenir dependencia circular
   ],
   controllers: [UserController],
   providers: [UserService],

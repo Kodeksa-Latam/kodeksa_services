@@ -3,6 +3,7 @@ import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import {  Expose, Transform, Type } from 'class-transformer';
 import { CardConfigurationResponseDto } from '../card-configurations/card-configuration.dto';
 import { IsValidEmail } from '../../common/decorators/validation.decorator';
+import { CurriculumResponseDto } from '../curriculums/curriculum.dto';
 
 /**
  * DTO para crear un usuario
@@ -167,7 +168,12 @@ export class UserResponseDto {
   @Type(() => CardConfigurationResponseDto)
   cardConfiguration?: CardConfigurationResponseDto;
 
-
+  @ApiPropertyOptional({
+    description: 'Currículum del usuario',
+    type: () => CurriculumResponseDto,
+  })
+  @Type(() => CurriculumResponseDto)
+  curriculum?: CurriculumResponseDto;
 
   constructor(partial: Partial<UserResponseDto>) {
     Object.assign(this, partial);

@@ -64,7 +64,7 @@ export class CardConfigurationService {
       if (checkUserExists) {
         try {
           // Llamar a findById con loadCardConfig=false para evitar ciclos
-          await this.userService.findById(userId, false);
+          await this.userService.findById(userId);
         } catch (error) {
           // Si es un error diferente al de usuario no encontrado, lo propagamos
           if (!(error instanceof HttpException)) {
@@ -117,7 +117,7 @@ export class CardConfigurationService {
         this.logger.log(`Verificando existencia del usuario ${createDto.userId}`);
         try {
           // El parámetro false es crucial - evita que findById cargue la configuración de tarjeta
-          await this.userService.findById(createDto.userId, false);
+          await this.userService.findById(createDto.userId);
           this.logger.log(`Usuario ${createDto.userId} encontrado correctamente`);
         } catch (error) {
           this.logger.error(`Error al verificar usuario: ${error.message}`);

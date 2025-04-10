@@ -8,6 +8,7 @@ import {
   OneToOne,
 } from 'typeorm';
 import { CardConfigurationEntity } from '../card-configurations/card-configuration.entity';
+import { CurriculumEntity } from '../curriculums/curriculum.entity';
 
 /**
  * Entidad de Usuario para TypeORM
@@ -57,4 +58,7 @@ export class UserEntity {
   // Relaciones
   @OneToOne(() => CardConfigurationEntity, cardConfig => cardConfig.user)
   cardConfiguration: CardConfigurationEntity;
+
+  @OneToOne(() => CurriculumEntity, curriculum => curriculum.user)
+  curriculum: CurriculumEntity;
 }

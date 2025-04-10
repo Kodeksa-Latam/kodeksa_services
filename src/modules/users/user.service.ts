@@ -7,6 +7,7 @@ import { CreateUserDto, UpdateUserDto, UserResponseDto } from './user.dto';
 import { PaginatedResult } from '../../common/dto/pagination.dto';
 import { CardConfigurationService } from '../card-configurations/card-configuration.service';
 import { UserErrors } from './errors/user-errors';
+import { CurriculumService } from '../curriculums/curriculum.service';
 
 /**
  * Servicio de Usuarios
@@ -22,6 +23,8 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
     @Inject(forwardRef(() => CardConfigurationService))
     private readonly cardConfigService: CardConfigurationService,
+    @Inject(forwardRef(() => CurriculumService))
+    private readonly curriculumService: CurriculumService
   ) {}
 
   /**
@@ -53,7 +56,7 @@ export class UserService {
         where,
         skip,
         take: limit,
-        order: { createdAt: 'DESC' },
+        order: { createdAt: 'ASC' },
         relations: ['cardConfiguration'],
       });
       
@@ -85,12 +88,29 @@ export class UserService {
     }
   }
 
+
   /**
    * Obtiene un usuario por su ID
+   * @param id ID del usuario
+   * @param options Opciones para cargar relaciones
    */
-  async findById(id: string, loadCardConfig: boolean = true): Promise<UserResponseDto> {
+  async findById(id: string, options: {
+    loadCardConfig?: boolean;
+    loadCurriculum?: boolean;
+  } = {
+    loadCardConfig: true,
+    loadCurriculum: true
+  }): Promise<UserResponseDto> {
     try {
-      const relations = loadCardConfig ? ['cardConfiguration'] : [];
+      const relations:string[] = [];
+      
+      if (options.loadCardConfig) {
+        relations.push('cardConfiguration');
+      }
+      
+      if (options.loadCurriculum) {
+        relations.push('curriculum');
+      }
       
       const user = await this.userRepository.findOne({
         where: { id },
@@ -125,7 +145,7 @@ export class UserService {
     try {
       const user = await this.userRepository.findOne({
         where: { slug },
-        relations: ['cardConfiguration'],
+        relations: ['cardConfiguration', 'curriculum'],
       });
       
       if (!user) {
@@ -185,6 +205,9 @@ export class UserService {
       
       // 1. Crear configuración de tarjeta
       await this.createDefaultCardConfiguration(userId);
+
+      // 2. Crear Curriculum
+      await this.createDefaultCurriculum(userId);
       
       // Aquí se pueden añadir más configuraciones por defecto en el futuro
       // Por ejemplo: curriculum, experiencias, etc.
@@ -232,6 +255,17 @@ export class UserService {
       this.logger.error(`Error al crear configuración de tarjeta: ${error.message}`, error.stack);
       throw error;
     }
+  }
+
+  /**
+   * Crea un nuevo usuario con su propio curriculum
+   */
+  private async createDefaultCurriculum(userId:string): Promise<void> {
+    this.logger.log(`Creando curriculum por defecto para el usuario ${userId}`);
+    await this.curriculumService.create({
+       userId:userId,
+    },true);
+    
   }
 
   /**

@@ -8,6 +8,7 @@ import appConfig from './config/app.config';
 import { UserModule } from './modules/users/user.module';
 import { CardConfigurationModule } from './modules/card-configurations/card-configuration.module';
 import { SolutionModule } from './modules/solutions/solution.module';
+import { CurriculumModule } from './modules/curriculums/curriculum.module';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { SolutionModule } from './modules/solutions/solution.module';
     // Módulos de la aplicación
     UserModule,
     CardConfigurationModule,
-    SolutionModule
+    SolutionModule,
+    CurriculumModule
   ],
   providers: [
     // Interceptor global para logging
