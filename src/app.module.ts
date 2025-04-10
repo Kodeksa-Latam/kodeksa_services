@@ -9,6 +9,8 @@ import { UserModule } from './modules/users/user.module';
 import { CardConfigurationModule } from './modules/card-configurations/card-configuration.module';
 import { SolutionModule } from './modules/solutions/solution.module';
 import { CurriculumModule } from './modules/curriculums/curriculum.module';
+import { SkillModule } from './modules/skills/skill.module';
+import { WorkExperienceModule } from './modules/work-experiences/work-experience.module';
 
 @Module({
   imports: [
@@ -34,7 +36,9 @@ import { CurriculumModule } from './modules/curriculums/curriculum.module';
     UserModule,
     CardConfigurationModule,
     SolutionModule,
-    CurriculumModule
+    CurriculumModule,
+    SkillModule,
+    WorkExperienceModule
   ],
   providers: [
     // Interceptor global para logging

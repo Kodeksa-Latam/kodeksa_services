@@ -8,6 +8,8 @@ import { PaginatedResult } from '../../common/dto/pagination.dto';
 import { CardConfigurationService } from '../card-configurations/card-configuration.service';
 import { UserErrors } from './errors/user-errors';
 import { CurriculumService } from '../curriculums/curriculum.service';
+import { SkillService } from '../skills/skill.service';
+import { WorkExperienceService } from '../work-experiences/work-experience.service';
 
 /**
  * Servicio de Usuarios
@@ -24,7 +26,11 @@ export class UserService {
     @Inject(forwardRef(() => CardConfigurationService))
     private readonly cardConfigService: CardConfigurationService,
     @Inject(forwardRef(() => CurriculumService))
-    private readonly curriculumService: CurriculumService
+    private readonly curriculumService: CurriculumService,
+    @Inject(forwardRef(() => SkillService))
+    private readonly skillService: SkillService,
+    @Inject(forwardRef(() => WorkExperienceService))
+    private readonly workExperienceService: WorkExperienceService,
   ) {}
 
   /**
@@ -57,7 +63,7 @@ export class UserService {
         skip,
         take: limit,
         order: { createdAt: 'ASC' },
-        relations: ['cardConfiguration'],
+        relations: ['cardConfiguration', 'skills'],
       });
       
       const items = users.map(user => {
@@ -145,7 +151,7 @@ export class UserService {
     try {
       const user = await this.userRepository.findOne({
         where: { slug },
-        relations: ['cardConfiguration', 'curriculum'],
+        relations: ['cardConfiguration', 'curriculum', 'skills','workExperiences'],
       });
       
       if (!user) {

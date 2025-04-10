@@ -6,9 +6,12 @@ import {
   UpdateDateColumn,
   Index,
   OneToOne,
+  OneToMany,
 } from 'typeorm';
 import { CardConfigurationEntity } from '../card-configurations/card-configuration.entity';
 import { CurriculumEntity } from '../curriculums/curriculum.entity';
+import { SkillEntity } from '../skills/skill.entity';
+import { WorkExperienceEntity } from '../work-experiences/work-experience.entity';
 
 /**
  * Entidad de Usuario para TypeORM
@@ -61,4 +64,10 @@ export class UserEntity {
 
   @OneToOne(() => CurriculumEntity, curriculum => curriculum.user)
   curriculum: CurriculumEntity;
+
+  @OneToMany(() => SkillEntity, skill => skill.user)
+  skills: SkillEntity[];
+
+  @OneToMany(() => WorkExperienceEntity, workExperience => workExperience.user)
+  workExperiences: WorkExperienceEntity[];
 }
