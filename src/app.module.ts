@@ -11,6 +11,8 @@ import { SolutionModule } from './modules/solutions/solution.module';
 import { CurriculumModule } from './modules/curriculums/curriculum.module';
 import { SkillModule } from './modules/skills/skill.module';
 import { WorkExperienceModule } from './modules/work-experiences/work-experience.module';
+import { VacancyModule } from './modules/vacancies/vacancy.module';
+import { ApplicationModule } from './modules/applications/application.module';
 
 @Module({
   imports: [
@@ -38,7 +40,9 @@ import { WorkExperienceModule } from './modules/work-experiences/work-experience
     SolutionModule,
     CurriculumModule,
     SkillModule,
-    WorkExperienceModule
+    WorkExperienceModule,
+    VacancyModule,
+    ApplicationModule
   ],
   providers: [
     // Interceptor global para logging
