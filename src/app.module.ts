@@ -13,6 +13,7 @@ import { SkillModule } from './modules/skills/skill.module';
 import { WorkExperienceModule } from './modules/work-experiences/work-experience.module';
 import { VacancyModule } from './modules/vacancies/vacancy.module';
 import { ApplicationModule } from './modules/applications/application.module';
+import { CloudinaryModule } from './common/services/cloudinary.module';
 
 @Module({
   imports: [
@@ -42,7 +43,8 @@ import { ApplicationModule } from './modules/applications/application.module';
     SkillModule,
     WorkExperienceModule,
     VacancyModule,
-    ApplicationModule
+    ApplicationModule,
+    CloudinaryModule
   ],
   providers: [
     // Interceptor global para logging

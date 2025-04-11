@@ -6,6 +6,7 @@ import { CreateApplicationDto, UpdateApplicationDto, ApplicationResponseDto } fr
 import { ApplicationErrors } from './errors/application-errors';
 import { VacancyService } from '../vacancies/vacancy.service';
 import { PaginatedResult } from '../../common/dto/pagination.dto';
+import { CloudinaryService } from 'src/common/services/cloudinary.service';
 
 /**
  * Servicio de Aplicaciones a Vacantes
@@ -21,6 +22,7 @@ export class ApplicationService {
     private readonly applicationRepository: Repository<ApplicationEntity>,
     @Inject(forwardRef(() => VacancyService))
     private readonly vacancyService: VacancyService,
+    private readonly cloudinaryService: CloudinaryService,
   ) {}
 
   /**
@@ -225,6 +227,105 @@ export class ApplicationService {
       }
       
       this.logger.error(`Error al obtener aplicaciones por ID de vacante: ${error.message}`, error.stack);
+      throw new HttpException(
+        ApplicationErrors.DATABASE_ERROR,
+        ApplicationErrors.DATABASE_ERROR.httpStatus
+      );
+    }
+  }
+
+  /**
+   * Crea una nueva aplicación con CV
+   */
+  async createWithCV(createDto: CreateApplicationDto, cvFile: Express.Multer.File): Promise<ApplicationResponseDto> {
+    try {
+      // Verificar que la vacante existe y está abierta
+      try {
+        const vacancy = await this.vacancyService.findById(createDto.vacancyId);
+        
+        if (!vacancy.isActive) {
+          throw new HttpException(
+            ApplicationErrors.VACANCY_INACTIVE,
+            ApplicationErrors.VACANCY_INACTIVE.httpStatus
+          );
+        }
+        
+        if (vacancy.status !== 'open') {
+          throw new HttpException(
+            ApplicationErrors.VACANCY_CLOSED,
+            ApplicationErrors.VACANCY_CLOSED.httpStatus
+          );
+        }
+      } catch (error) {
+        if (error instanceof HttpException) {
+          throw error;
+        }
+        throw new HttpException(
+          ApplicationErrors.VACANCY_NOT_FOUND,
+          ApplicationErrors.VACANCY_NOT_FOUND.httpStatus
+        );
+      }
+      
+      // Verificar que no exista una aplicación con el mismo email para esta vacante
+      const existingApplication = await this.applicationRepository.findOne({
+        where: {
+          email: createDto.email,
+          vacancyId: createDto.vacancyId,
+        }
+      });
+      
+      if (existingApplication) {
+        throw new HttpException(
+          ApplicationErrors.APPLICATION_ALREADY_EXISTS,
+          ApplicationErrors.APPLICATION_ALREADY_EXISTS.httpStatus
+        );
+      }
+      
+      // Subir CV a Cloudinary
+      let cvUrl = '';
+      if (cvFile) {
+        try {
+          cvUrl = await this.cloudinaryService.uploadFile(cvFile, 'kodeksa/application-resumes');
+          this.logger.log(`CV subido a Cloudinary: ${cvUrl}`);
+        } catch (uploadError) {
+          this.logger.error(`Error al subir CV a Cloudinary: ${uploadError.message}`, uploadError.stack);
+          throw new HttpException(
+            ApplicationErrors.CV_UPLOAD_ERROR,
+            ApplicationErrors.CV_UPLOAD_ERROR.httpStatus
+          );
+        }
+      }
+      
+      // Crear la aplicación con la URL del CV
+      const newApplication = this.applicationRepository.create({
+        ...createDto,
+        cvUrl,
+        status: 'pending', // Estado inicial
+        isActive: true,
+      });
+      
+      const savedApplication = await this.applicationRepository.save(newApplication);
+      
+      // Recuperar la aplicación con relaciones
+      const completeApplication = await this.applicationRepository.findOne({
+        where: { id: savedApplication.id },
+        relations: ['vacancy'],
+      });
+
+      if (!completeApplication) {
+        throw new HttpException(
+          ApplicationErrors.APPLICATION_NOT_CREATED,
+          ApplicationErrors.APPLICATION_NOT_CREATED.httpStatus
+        );
+      }
+      
+      return new ApplicationResponseDto(completeApplication);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      
+      this.logger.error(`Error al crear aplicación: ${error.message}`, error.stack);
       throw new HttpException(
         ApplicationErrors.DATABASE_ERROR,
         ApplicationErrors.DATABASE_ERROR.httpStatus
