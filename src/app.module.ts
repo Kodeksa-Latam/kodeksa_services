@@ -14,6 +14,7 @@ import { WorkExperienceModule } from './modules/work-experiences/work-experience
 import { VacancyModule } from './modules/vacancies/vacancy.module';
 import { ApplicationModule } from './modules/applications/application.module';
 import { CloudinaryModule } from './common/services/cloudinary.module';
+import { BlogModule } from './modules/blogs/blog.module';
 
 @Module({
   imports: [
@@ -44,7 +45,8 @@ import { CloudinaryModule } from './common/services/cloudinary.module';
     WorkExperienceModule,
     VacancyModule,
     ApplicationModule,
-    CloudinaryModule
+    CloudinaryModule,
+    BlogModule
   ],
   providers: [
     // Interceptor global para logging

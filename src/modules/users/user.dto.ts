@@ -4,6 +4,8 @@ import {  Expose, Transform, Type } from 'class-transformer';
 import { CardConfigurationResponseDto } from '../card-configurations/card-configuration.dto';
 import { IsValidEmail } from '../../common/decorators/validation.decorator';
 import { CurriculumResponseDto } from '../curriculums/curriculum.dto';
+import { SkillResponseDto } from '../skills/skill.dto';
+import { WorkExperienceResponseDto } from '../work-experiences/work-experience.dto';
 
 /**
  * DTO para crear un usuario
@@ -174,6 +176,20 @@ export class UserResponseDto {
   })
   @Type(() => CurriculumResponseDto)
   curriculum?: CurriculumResponseDto;
+
+  @ApiPropertyOptional({
+    description: 'Habilidades del usuario',
+    type: () => [SkillResponseDto],
+  })
+  @Type(() => SkillResponseDto)
+  skills?: SkillResponseDto[] = [];
+
+  @ApiPropertyOptional({
+    description: 'Experiencias laborales del usuario',
+    type: () => [WorkExperienceResponseDto],
+  })
+  @Type(() => WorkExperienceResponseDto)
+  workExperiences?: WorkExperienceResponseDto[] = [];
 
   constructor(partial: Partial<UserResponseDto>) {
     Object.assign(this, partial);

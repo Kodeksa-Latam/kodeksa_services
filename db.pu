@@ -78,6 +78,7 @@ Table(blogs, "blogs") {
     foreign_key(id_user) : uuid
     image: varchar
     title: varchar
+    slug: varchar
     short_description
     categories: List[varchar]
     is_active: boolean
@@ -85,17 +86,19 @@ Table(blogs, "blogs") {
     updated_at: datetime
 }
 
+
+
 Table(blog_sections, "blog_sections") {
     primary_key(id) : uuid
     foreign_key(id_blog) : uuid
     order: int
-    type: varchar
+    type: varchar enum("paragraph", "image", "heading", "subheading", "list") not null
     content: varchar
-    src: varchar
-    alt: varchar
-    caption: varchar
-    style: varchar
-    items: List[varchar]
+    src: varchar (only for "image" type)
+    alt: varchar (only for "image" type)
+    caption: varchar (only for "image" type)
+    style: varchar enum("ordered", "unordered")
+    items: List[varchar] (only for "list" type)
 }
 
 Table(languages, "languages"){
