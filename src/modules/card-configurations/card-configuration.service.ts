@@ -270,6 +270,7 @@ export class CardConfigurationService {
       // Restablecer los valores a los predeterminados
       const defaultValues: UpdateCardConfigurationDto = {
         imageSize: 90,
+        imageLeftOffset:"0",
         bgColor: '#FFFFFF',
         textAbove: '',
         textAboveColor: '#000000',

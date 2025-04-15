@@ -26,6 +26,9 @@ export class CardConfigurationEntity {
   imageSize: number;
 
   @Column({ nullable: true })
+  imageLeftOffset: string;
+
+  @Column({ nullable: true })
   bgColor: string;
 
   @Column({ nullable: true })

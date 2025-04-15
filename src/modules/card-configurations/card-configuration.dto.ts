@@ -21,6 +21,14 @@ export class CreateCardConfigurationDto {
   imageSize?: number;
 
   @ApiPropertyOptional({
+    description: 'Tamaño de la imagen',
+    example: 90,
+  })
+  @IsNumber({}, { message: 'Que tan lejos quedará la imagen de la izquierda' })
+  @IsOptional()
+  imageLeftOffset?: string;
+
+  @ApiPropertyOptional({
     description: 'Color de fondo en formato hexadecimal',
     example: '#FFFFFF',
   })
@@ -179,6 +187,12 @@ export class CardConfigurationResponseDto {
     example: 90,
   })
   imageSize: number;
+
+  @ApiPropertyOptional({
+    description: 'separación de la imagen de la izquierda',
+    example: "0",
+  })
+  imageLeftOffset: string;
 
   @ApiPropertyOptional({
     description: 'Color de fondo en formato hexadecimal',
