@@ -5,8 +5,8 @@ export function setupSwagger(app: any): void {
       const { SwaggerModule, DocumentBuilder } = require('@nestjs/swagger');
       
       const config = new DocumentBuilder()
-        .setTitle('NestJS Users API')
-        .setDescription('API para gestión de usuarios')
+        .setTitle('NestJS Kodeksa Landing API')
+        .setDescription('API para gestión de landing page de Kodeksa Latam')
         .setVersion('1.0')
         .addTag('users')
         .build();

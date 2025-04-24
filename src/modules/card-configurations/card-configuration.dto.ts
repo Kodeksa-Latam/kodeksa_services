@@ -24,7 +24,8 @@ export class CreateCardConfigurationDto {
     description: 'Tamaño de la imagen',
     example: 90,
   })
-  @IsNumber({}, { message: 'Que tan lejos quedará la imagen de la izquierda' })
+
+  @ApiPropertyOptional({ description: 'Que tan lejos quedará la imagen de la izquierda' })
   @IsOptional()
   imageLeftOffset?: string;
 
